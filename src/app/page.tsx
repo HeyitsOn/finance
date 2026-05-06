@@ -1,65 +1,103 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const serviceItems = [
+  { title: "Tax preparation support", description: "Expert guidance through filing, review, and compliance." },
+  { title: "Document organisation", description: "Secure classification for statements, receipts, and financial records." },
+  { title: "Financial reporting", description: "Clear, structured updates on your progress and status." },
+  { title: "Compliance tracking", description: "Visibility into deadlines, missing documents, and review milestones." },
+];
+
+const howItWorks = [
+  "Submit your documents",
+  "We review and organise them",
+  "Receive structured updates and reports",
+];
+
+const trustItems = [
+  "Secure client portal",
+  "Private financial handling",
+  "Structured workflow system",
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-[#F7F8FA] py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] xl:gap-16">
+          <div className="flex flex-col justify-center gap-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#B89B5E]">Managed finance services</p>
+            <h1 className="max-w-3xl text-4xl font-semibold leading-tight text-[#111827] sm:text-5xl">
+              Financial Management, Made Simple
+            </h1>
+            <p className="max-w-2xl text-sm leading-7 text-[#6B7280]">
+              A personal finance service that helps you organise, track, and manage your financial documents with clarity and confidence.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/booking" className="rounded-full bg-[#B89B5E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a3864d]">
+                Book Consultation
+              </Link>
+              <Link href="/portal" className="rounded-full border border-[#E5E7EB] bg-white px-6 py-3 text-sm font-semibold text-[#111827] transition hover:bg-[#F3F4F6]">
+                Access Client Portal
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-[32px] border border-[#E5E7EB] bg-white p-8 shadow-[0_18px_50px_rgba(17,24,39,0.05)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#6B7280]">Client portal overview</p>
+            <div className="mt-6 space-y-4">
+              <div className="rounded-3xl border border-[#E5E7EB] bg-[#F7F8FA] p-5">
+                <p className="text-sm font-semibold text-[#111827]">Secure file uploads</p>
+                <p className="mt-2 text-sm leading-6 text-[#6B7280]">Send documents safely with a minimal, trusted workflow.</p>
+              </div>
+              <div className="rounded-3xl border border-[#E5E7EB] bg-[#F7F8FA] p-5">
+                <p className="text-sm font-semibold text-[#111827]">Progress tracking</p>
+                <p className="mt-2 text-sm leading-6 text-[#6B7280]">See review stages and completion status at a glance.</p>
+              </div>
+              <div className="rounded-3xl border border-[#E5E7EB] bg-[#F7F8FA] p-5">
+                <p className="text-sm font-semibold text-[#111827]">Advisor support</p>
+                <p className="mt-2 text-sm leading-6 text-[#6B7280]">A finance professional reviews your documents and keeps you informed.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-8 lg:grid-cols-3">
+          {serviceItems.map((item) => (
+            <div key={item.title} className="rounded-[28px] border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_30px_rgba(17,24,39,0.04)]">
+              <p className="text-sm font-semibold text-[#111827]">{item.title}</p>
+              <p className="mt-3 text-sm leading-7 text-[#6B7280]">{item.description}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="mt-16 rounded-[32px] border border-[#E5E7EB] bg-white p-10 shadow-[0_18px_50px_rgba(17,24,39,0.05)]">
+          <div className="grid gap-6 sm:grid-cols-3">
+            {howItWorks.map((step, index) => (
+              <div key={step} className="space-y-3 rounded-3xl bg-[#F7F8FA] p-6">
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-sm font-semibold text-[#B89B5E]">
+                  {index + 1}
+                </div>
+                <p className="font-semibold text-[#111827]">{step}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-6 lg:grid-cols-3">
+          {trustItems.map((item) => (
+            <div key={item} className="rounded-[28px] border border-[#E5E7EB] bg-white p-6">
+              <p className="text-sm font-semibold text-[#111827]">{item}</p>
+              <p className="mt-3 text-sm leading-7 text-[#6B7280]">
+                {item === "Secure client portal"
+                  ? "Encrypted access and controlled permission for your financial documents."
+                  : item === "Private financial handling"
+                  ? "Your records are managed with a privacy-first process and responsible review."
+                  : "A clear workflow that keeps every step visible and organised."}
+              </p>
+            </div>
+          ))}
+        </section>
+      </div>
+    </main>
   );
 }
