@@ -17,7 +17,7 @@ const sections = [
   { id: "messages", label: "Messages" },
 ] as const;
 
-type Doc = { id: string; user_id: string; file_name: string; category: string; status: string; created_at: string };
+type Doc = { id: string; user_id: string; file_name: string; file_path: string; category: string; status: string; created_at: string };
 type Booking = { id: string; email: string; date: string; time: string; created_at: string };
 type Contact = { id: string; name: string; email: string; message: string; created_at: string };
 type Message = { id: string; user_id: string; sender: string; content: string; created_at: string };
@@ -86,6 +86,20 @@ export default function AdminPage() {
     if (section === "contacts") fetchContacts();
     if (section === "messages") fetchMessages();
   }, [token, section, fetchDocuments, fetchBookings, fetchContacts, fetchMessages]);
+
+  const downloadFile = async (filePath: string, fileName: string) => {
+    if (!token) return;
+    const res = await fetch("/api/admin/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify({ filePath }),
+    });
+    const { url } = await res.json();
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+  };
 
   const updateStatus = async (id: string, status: string) => {
     if (!token) return;
@@ -183,6 +197,7 @@ export default function AdminPage() {
                           <th className="px-4 py-4">Category</th>
                           <th className="px-4 py-4">Date</th>
                           <th className="px-4 py-4">Status</th>
+                          <th className="px-4 py-4">Download</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -201,6 +216,14 @@ export default function AdminPage() {
                                 <option value="in_review">In Review</option>
                                 <option value="completed">Completed</option>
                               </select>
+                            </td>
+                            <td className="px-4 py-4">
+                              <button
+                                onClick={() => downloadFile(doc.file_path, doc.file_name)}
+                                className="rounded-xl bg-[#B89B5E] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#a3864d]"
+                              >
+                                Download
+                              </button>
                             </td>
                           </tr>
                         ))}
