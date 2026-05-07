@@ -18,16 +18,10 @@ export function SiteHeader() {
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user || null);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -37,10 +31,24 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#E5E7EB] bg-white/95 backdrop-blur-sm">
+    <header
+      className="sticky top-0 z-40"
+      style={{
+        background: "rgba(61,71,40,0.7)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(248,246,241,0.08)",
+      }}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#111827]">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] text-base font-bold text-[#111827]">
+        <Link
+          href="/"
+          className="flex items-center gap-3 text-sm font-bold uppercase tracking-[0.25em] transition-opacity hover:opacity-80"
+          style={{ color: "#F8F6F1" }}
+        >
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold"
+            style={{ background: "rgba(201,169,106,0.2)", border: "1px solid rgba(201,169,106,0.3)", color: "#C9A96A" }}
+          >
             T
           </span>
           TaxFlow
@@ -48,7 +56,12 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((item) => (
-            <Link key={item.href} href={item.href} className="text-sm font-medium text-[#6B7280] transition hover:text-[#111827]">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-medium transition-colors hover:opacity-100"
+              style={{ color: "rgba(248,246,241,0.65)" }}
+            >
               {item.label}
             </Link>
           ))}
@@ -59,13 +72,15 @@ export function SiteHeader() {
             <>
               <Link
                 href="/portal"
-                className="rounded-full bg-[#B89B5E] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#a3864d]"
+                className="rounded-full px-5 py-2 text-sm font-semibold transition-all hover:scale-105 hover:shadow-[0_4px_20px_rgba(201,169,106,0.35)]"
+                style={{ background: "#C9A96A", color: "#2d3318" }}
               >
                 Portal
               </Link>
               <button
                 onClick={handleLogout}
-                className="rounded-full border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-semibold text-[#111827] transition hover:bg-[#F3F4F6]"
+                className="rounded-full border px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
+                style={{ borderColor: "rgba(248,246,241,0.2)", color: "#F8F6F1", background: "transparent" }}
               >
                 Logout
               </button>
@@ -74,13 +89,15 @@ export function SiteHeader() {
             <>
               <Link
                 href="/auth/login"
-                className="rounded-full border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-semibold text-[#111827] transition hover:bg-[#F3F4F6]"
+                className="rounded-full border px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
+                style={{ borderColor: "rgba(248,246,241,0.2)", color: "#F8F6F1", background: "transparent" }}
               >
                 Log In
               </Link>
               <Link
                 href="/auth/signup"
-                className="rounded-full bg-[#B89B5E] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#a3864d]"
+                className="rounded-full px-5 py-2 text-sm font-semibold transition-all hover:scale-105"
+                style={{ background: "#C9A96A", color: "#2d3318" }}
               >
                 Sign Up
               </Link>
@@ -91,4 +108,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

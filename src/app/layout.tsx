@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full bg-[#F7F8FA] font-sans text-[#111827]">
+      <body className="min-h-full font-sans" style={{ background: "#4F5B35", color: "#F8F6F1" }}>
         <SiteHeader />
         {children}
         <AssistantWidget />
