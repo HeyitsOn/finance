@@ -1,5 +1,8 @@
 import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,6 +46,19 @@ export async function POST(req: NextRequest) {
     if (dbError) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
+
+    await resend.emails.send({
+      from: "TaxFlow <onboarding@resend.dev>",
+      to: "sisnethembasibiya@icloud.com",
+      subject: `New document uploaded: ${file.name}`,
+      html: `
+        <h2>New Document Uploaded</h2>
+        <p><strong>File:</strong> ${file.name}</p>
+        <p><strong>Category:</strong> ${category}</p>
+        <p><strong>User ID:</strong> ${userId}</p>
+        <p><strong>Uploaded at:</strong> ${new Date().toLocaleString()}</p>
+      `,
+    });
 
     return NextResponse.json(
       { success: true, message: "File uploaded successfully" },
