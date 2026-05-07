@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         file_name: file.name,
         file_path: data.path,
         category,
-        status: "Received",
+        status: "uploaded",
         created_at: new Date().toISOString(),
       },
     ]);

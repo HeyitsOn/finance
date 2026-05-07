@@ -131,8 +131,8 @@ export default function PortalPage() {
   };
 
   const total = files.length;
-  const inReview = files.filter(f => f.status === "In review" || f.status === "Received").length;
-  const completed = files.filter(f => f.status === "Completed").length;
+  const inReview = files.filter(f => f.status === "in_review").length;
+  const completed = files.filter(f => f.status === "completed").length;
 
   const progressSteps = [
     { label: "Uploaded", value: total > 0 ? 100 : 0 },
