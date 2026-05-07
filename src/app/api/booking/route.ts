@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: "TaxFlow <onboarding@resend.dev>",
-      to: "onika@sabullion.co.za",
+      to: ["snethembasibiya@icloud.com", "silekuonika02@gmail.com"],
       subject: `New consultation booking from ${email}`,
       html: `
         <h2>New Consultation Booking</h2>
