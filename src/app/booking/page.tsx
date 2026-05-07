@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 type Slot = { id: string; date: string; time: string };
 
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
 const anim = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -19,6 +19,7 @@ export default function BookingPage() {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+  const [customTime, setCustomTime] = useState("09:00");
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -49,15 +50,18 @@ export default function BookingPage() {
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSlot || !email) return;
+    if (!selectedDate || !email) return;
     setLoading(true);
     setError("");
+
+    const bookingDate = selectedSlot?.date ?? selectedDate!;
+    const bookingTime = selectedSlot?.time ?? customTime;
 
     try {
       const res = await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, date: selectedSlot.date, time: selectedSlot.time, slotId: selectedSlot.id }),
+        body: JSON.stringify({ email, date: bookingDate, time: bookingTime, slotId: selectedSlot?.id ?? null }),
       });
 
       if (!res.ok) {
@@ -66,7 +70,7 @@ export default function BookingPage() {
       }
 
       setSuccess(true);
-      setSlots((prev) => prev.filter((s) => s.id !== selectedSlot.id));
+      setSlots((prev) => prev.filter((s) => s.id !== selectedSlot?.id));
       setSelectedSlot(null);
       setSelectedDate(null);
       setEmail("");
@@ -122,54 +126,56 @@ export default function BookingPage() {
             {/* Calendar */}
             <motion.div
               {...anim(0.1)}
-              className="rounded-[28px] p-6"
+              className="rounded-[28px] p-4"
               style={{ background: "rgba(248,246,241,0.07)", border: "1px solid rgba(248,246,241,0.1)", backdropFilter: "blur(16px)" }}
             >
-              <div className="mb-6 flex items-center justify-between">
-                <button onClick={prevMonth} className="rounded-xl p-2 transition hover:opacity-70" style={{ background: "rgba(248,246,241,0.08)", color: "#F8F6F1" }}>
-                  <ChevronLeft size={18} />
+              <div className="mb-4 flex items-center justify-between">
+                <button onClick={prevMonth} className="rounded-lg p-1.5 transition hover:opacity-70" style={{ background: "rgba(248,246,241,0.08)", color: "#F8F6F1" }}>
+                  <ChevronLeft size={15} />
                 </button>
-                <p className="text-sm font-semibold" style={{ color: "#F8F6F1" }}>{monthLabel}</p>
-                <button onClick={nextMonth} className="rounded-xl p-2 transition hover:opacity-70" style={{ background: "rgba(248,246,241,0.08)", color: "#F8F6F1" }}>
-                  <ChevronRight size={18} />
+                <p className="text-xs font-semibold" style={{ color: "#F8F6F1" }}>{monthLabel}</p>
+                <button onClick={nextMonth} className="rounded-lg p-1.5 transition hover:opacity-70" style={{ background: "rgba(248,246,241,0.08)", color: "#F8F6F1" }}>
+                  <ChevronRight size={15} />
                 </button>
               </div>
 
-              <div className="mb-3 grid grid-cols-7 text-center">
-                {DAYS.map((d) => (
-                  <p key={d} className="text-xs font-semibold" style={{ color: "rgba(248,246,241,0.4)" }}>{d}</p>
+              <div className="mb-2 grid grid-cols-7 text-center">
+                {DAYS.map((d, i) => (
+                  <p key={i} className="text-[10px] font-semibold" style={{ color: "rgba(248,246,241,0.4)" }}>{d}</p>
                 ))}
               </div>
 
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-0.5">
                 {calendarDays.map((day, i) => {
                   if (!day) return <div key={`empty-${i}`} />;
                   const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                  const isAvailable = availableDates.has(dateStr);
+                  const hasSlots = availableDates.has(dateStr);
                   const isSelected = selectedDate === dateStr;
                   const isPast = dateStr < today;
 
                   return (
                     <button
                       key={dateStr}
-                      disabled={!isAvailable || isPast}
+                      disabled={isPast}
                       onClick={() => { setSelectedDate(dateStr); setSelectedSlot(null); }}
-                      className="aspect-square rounded-xl text-sm font-medium transition-all"
+                      className="aspect-square rounded-lg text-xs font-medium transition-all"
                       style={{
                         background: isSelected
                           ? "#C9A96A"
-                          : isAvailable && !isPast
+                          : hasSlots && !isPast
                           ? "rgba(201,169,106,0.15)"
                           : "transparent",
                         color: isSelected
                           ? "#2d3318"
-                          : isAvailable && !isPast
+                          : isPast
+                          ? "rgba(248,246,241,0.2)"
+                          : hasSlots
                           ? "#C9A96A"
-                          : "rgba(248,246,241,0.25)",
-                        border: isAvailable && !isPast && !isSelected
+                          : "rgba(248,246,241,0.65)",
+                        border: hasSlots && !isPast && !isSelected
                           ? "1px solid rgba(201,169,106,0.3)"
                           : "1px solid transparent",
-                        cursor: isAvailable && !isPast ? "pointer" : "default",
+                        cursor: isPast ? "default" : "pointer",
                       }}
                     >
                       {day}
@@ -178,8 +184,8 @@ export default function BookingPage() {
                 })}
               </div>
 
-              <p className="mt-5 text-xs" style={{ color: "rgba(248,246,241,0.4)" }}>
-                Gold dates have available slots. Select a date to see times.
+              <p className="mt-3 text-[10px]" style={{ color: "rgba(248,246,241,0.4)" }}>
+                Gold = pre-set slots. Any future date is selectable.
               </p>
             </motion.div>
 
@@ -198,9 +204,23 @@ export default function BookingPage() {
                 </div>
 
                 {!selectedDate ? (
-                  <p className="text-sm" style={{ color: "rgba(248,246,241,0.4)" }}>Pick a highlighted date on the calendar.</p>
+                  <p className="text-sm" style={{ color: "rgba(248,246,241,0.4)" }}>Pick a date on the calendar.</p>
                 ) : slotsForDate.length === 0 ? (
-                  <p className="text-sm" style={{ color: "rgba(248,246,241,0.4)" }}>No available slots for this date.</p>
+                  <div className="space-y-2">
+                    <p className="text-xs" style={{ color: "rgba(248,246,241,0.5)" }}>No pre-set slots — choose a time:</p>
+                    <input
+                      type="time"
+                      value={customTime}
+                      onChange={(e) => setCustomTime(e.target.value)}
+                      className="w-full rounded-2xl px-4 py-3 text-sm outline-none"
+                      style={{
+                        background: "rgba(248,246,241,0.07)",
+                        border: "1px solid rgba(248,246,241,0.15)",
+                        color: "#F8F6F1",
+                        colorScheme: "dark",
+                      }}
+                    />
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     {slotsForDate.map((slot) => (
@@ -221,7 +241,7 @@ export default function BookingPage() {
                 )}
               </motion.div>
 
-              {selectedSlot && (
+              {selectedDate && (selectedSlot || slotsForDate.length === 0) && (
                 <motion.form
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -250,7 +270,7 @@ export default function BookingPage() {
                     className="w-full rounded-full py-3 text-sm font-semibold transition hover:opacity-80 disabled:opacity-50"
                     style={{ background: "#C9A96A", color: "#2d3318" }}
                   >
-                    {loading ? "Confirming..." : `Confirm — ${selectedSlot.time}`}
+                    {loading ? "Confirming..." : `Confirm — ${selectedSlot?.time ?? customTime}`}
                   </button>
                 </motion.form>
               )}
