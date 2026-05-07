@@ -1,4 +1,44 @@
+"use client";
+
+import { useState } from "react";
+
 export default function BookingPage() {
+  const [email, setEmail] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, date, time }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to book consultation");
+      }
+
+      setSuccess(true);
+      setEmail("");
+      setDate("");
+      setTime("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#F7F8FA] py-16">
       <div className="mx-auto max-w-5xl px-6">
@@ -12,45 +52,50 @@ export default function BookingPage() {
           </div>
 
           <div className="mt-10 space-y-8 rounded-[28px] border border-[#E5E7EB] bg-[#F7F8FA] p-8">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl bg-white p-6 shadow-[0_12px_24px_rgba(17,24,39,0.05)]">
-                <p className="text-sm font-semibold text-[#111827]">Next Available</p>
-                <p className="mt-3 text-lg font-semibold text-[#111827]">Tuesday, May 14</p>
-                <p className="mt-1 text-sm text-[#6B7280]">2:00 PM - 2:45 PM</p>
+            <form onSubmit={handleBooking} className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="space-y-2 text-sm text-[#111827]">
+                  Email
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    required
+                    className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                  />
+                </label>
+                <label className="space-y-2 text-sm text-[#111827]">
+                  Preferred Date
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                    className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                  />
+                </label>
               </div>
-              <div className="rounded-3xl bg-white p-6 shadow-[0_12px_24px_rgba(17,24,39,0.05)]">
-                <p className="text-sm font-semibold text-[#111827]">Consultation Type</p>
-                <p className="mt-3 text-lg font-semibold text-[#111827]">Document review & planning</p>
-                <p className="mt-1 text-sm text-[#6B7280]">Secure call with your advisor.</p>
-              </div>
-            </div>
-
-            <div className="rounded-3xl bg-white p-6 shadow-[0_12px_24px_rgba(17,24,39,0.05)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6B7280]">My calendar</p>
-              <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                {[
-                  "May 14",
-                  "May 16",
-                  "May 18",
-                ].map((date) => (
-                  <div key={date} className="rounded-3xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-5 text-center">
-                    <p className="text-sm font-semibold text-[#111827]">{date}</p>
-                    <p className="mt-2 text-xs text-[#6B7280]">Available</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm font-semibold text-[#111827]">Ready to reserve your slot?</p>
-                <p className="text-sm text-[#6B7280]">A simple consultation sets the next milestone for your tax workflow.</p>
-              </div>
-              <button className="rounded-full bg-[#B89B5E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a3864d]">
-                Book Consultation
+              <label className="space-y-2 text-sm text-[#111827]">
+                Preferred Time
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                  className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                />
+              </label>
+              {error && <p className="text-sm text-red-600">{error}</p>}
+              {success && <p className="text-sm text-green-600">Booking confirmed! We'll send a confirmation email shortly.</p>}
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-full bg-[#B89B5E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a3864d] disabled:opacity-50"
+              >
+                {loading ? "Booking..." : "Book Consultation"}
               </button>
-            </div>
-          </div>
+            </form>
         </div>
       </div>
     </main>

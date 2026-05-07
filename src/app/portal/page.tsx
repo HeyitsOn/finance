@@ -33,6 +33,54 @@ const progressSteps = [
 
 export default function PortalPage() {
   const [section, setSection] = useState<typeof portalSections[number]["id"]>("dashboard");
+  const [user, setUser] = useState<any>(null);
+  const [uploadCategory, setUploadCategory] = useState("Tax");
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
+
+  const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    if (!file || !user) {
+      alert("Please select a file");
+      return;
+    }
+
+    setUploadLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", uploadCategory);
+      formData.append("userId", user.id);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Upload failed");
+      }
+
+      alert("File uploaded successfully!");
+      fileInput.value = "";
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setUploadLoading(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#F7F8FA] py-10">
