@@ -1,5 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,13 +15,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("contact_submissions")
       .insert([{ name, email, message, created_at: new Date().toISOString() }]);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    await resend.emails.send({
+      from: "TaxFlow <onboarding@resend.dev>",
+      to: "onika@sabullion.co.za",
+      subject: `New contact message from ${name}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    });
 
     return NextResponse.json(
       { success: true, message: "Message sent successfully" },

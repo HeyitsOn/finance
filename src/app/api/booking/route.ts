@@ -1,5 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,13 +15,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("bookings")
       .insert([{ email, date, time, created_at: new Date().toISOString() }]);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    await resend.emails.send({
+      from: "TaxFlow <onboarding@resend.dev>",
+      to: "onika@sabullion.co.za",
+      subject: `New consultation booking from ${email}`,
+      html: `
+        <h2>New Consultation Booking</h2>
+        <p><strong>Client Email:</strong> ${email}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Time:</strong> ${time}</p>
+      `,
+    });
+
+    await resend.emails.send({
+      from: "TaxFlow <onboarding@resend.dev>",
+      to: email,
+      subject: "Your TaxFlow consultation is confirmed",
+      html: `
+        <h2>Booking Confirmed</h2>
+        <p>Hi, your consultation has been booked for <strong>${date}</strong> at <strong>${time}</strong>.</p>
+        <p>Your advisor will be in touch shortly to confirm the details.</p>
+        <p>— The TaxFlow Team</p>
+      `,
+    });
 
     return NextResponse.json(
       { success: true, message: "Booking confirmed" },
