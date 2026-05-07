@@ -8,10 +8,11 @@ type Slot = { id: string; date: string; time: string };
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.08 } }),
-};
+const anim = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, delay, ease: "easeOut" as const },
+});
 
 export default function BookingPage() {
   const [email, setEmail] = useState("");
@@ -86,7 +87,7 @@ export default function BookingPage() {
   return (
     <main className="min-h-screen py-16" style={{ background: "linear-gradient(135deg, #4F5B35 0%, #6B7A45 50%, #3d4728 100%)" }}>
       <div className="mx-auto max-w-5xl px-6">
-        <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible" className="mb-10">
+        <motion.div {...anim(0)} className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>Booking</p>
           <h1 className="mt-3 text-4xl font-bold" style={{ color: "#F8F6F1" }}>Schedule your consultation</h1>
           <p className="mt-3 text-sm leading-7" style={{ color: "rgba(248,246,241,0.6)" }}>
@@ -120,10 +121,7 @@ export default function BookingPage() {
           <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
             {/* Calendar */}
             <motion.div
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
+              {...anim(0.1)}
               className="rounded-[28px] p-6"
               style={{ background: "rgba(248,246,241,0.07)", border: "1px solid rgba(248,246,241,0.1)", backdropFilter: "blur(16px)" }}
             >
@@ -188,10 +186,7 @@ export default function BookingPage() {
             {/* Slot picker + form */}
             <div className="space-y-5">
               <motion.div
-                custom={2}
-                variants={fadeUp}
-                initial="hidden"
-                animate="visible"
+                {...anim(0.2)}
                 className="rounded-[28px] p-6"
                 style={{ background: "rgba(248,246,241,0.07)", border: "1px solid rgba(248,246,241,0.1)", backdropFilter: "blur(16px)" }}
               >
