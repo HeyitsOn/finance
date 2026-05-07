@@ -15,12 +15,14 @@ const sections = [
   { id: "bookings", label: "Bookings" },
   { id: "contacts", label: "Contacts" },
   { id: "messages", label: "Messages" },
+  { id: "availability", label: "Availability" },
 ] as const;
 
 type Doc = { id: string; user_id: string; file_name: string; file_path: string; category: string; status: string; created_at: string };
 type Booking = { id: string; email: string; date: string; time: string; created_at: string };
 type Contact = { id: string; name: string; email: string; message: string; created_at: string };
 type Message = { id: string; user_id: string; sender: string; content: string; created_at: string };
+type AvailSlot = { id: string; date: string; time: string; is_booked: boolean };
 
 export default function AdminPage() {
   const [section, setSection] = useState<typeof sections[number]["id"]>("documents");
@@ -33,6 +35,10 @@ export default function AdminPage() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [replySending, setReplySending] = useState(false);
+  const [availSlots, setAvailSlots] = useState<AvailSlot[]>([]);
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [addingSlot, setAddingSlot] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -79,13 +85,46 @@ export default function AdminPage() {
     setMessages(Array.isArray(data) ? data : []);
   }, [token]);
 
+  const fetchAvailability = useCallback(async () => {
+    if (!token) return;
+    const res = await fetch("/api/admin/availability", { headers: authHeader(token) });
+    const data = await res.json();
+    setAvailSlots(Array.isArray(data) ? data : []);
+  }, [token]);
+
   useEffect(() => {
     if (!token) return;
     if (section === "documents") fetchDocuments();
     if (section === "bookings") fetchBookings();
     if (section === "contacts") fetchContacts();
     if (section === "messages") fetchMessages();
-  }, [token, section, fetchDocuments, fetchBookings, fetchContacts, fetchMessages]);
+    if (section === "availability") fetchAvailability();
+  }, [token, section, fetchDocuments, fetchBookings, fetchContacts, fetchMessages, fetchAvailability]);
+
+  const addSlot = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newDate || !newTime || !token) return;
+    setAddingSlot(true);
+    await fetch("/api/admin/availability", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify({ date: newDate, time: newTime }),
+    });
+    setNewDate("");
+    setNewTime("");
+    setAddingSlot(false);
+    fetchAvailability();
+  };
+
+  const deleteSlot = async (id: string) => {
+    if (!token) return;
+    await fetch("/api/admin/availability", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify({ id }),
+    });
+    fetchAvailability();
+  };
 
   const downloadFile = async (filePath: string, fileName: string) => {
     if (!token) return;
@@ -376,6 +415,87 @@ export default function AdminPage() {
                         </button>
                       </form>
                     </>
+                  )}
+                </div>
+              </div>
+            )}
+            {section === "availability" && (
+              <div className="space-y-6">
+                <div className="rounded-[28px] border border-[#E5E7EB] bg-white p-6">
+                  <h2 className="text-lg font-semibold text-[#111827]">Add Available Slot</h2>
+                  <p className="mt-1 text-sm text-[#6B7280]">Set dates and times clients can book consultations.</p>
+                  <form onSubmit={addSlot} className="mt-5 flex flex-wrap gap-3">
+                    <input
+                      type="date"
+                      value={newDate}
+                      onChange={(e) => setNewDate(e.target.value)}
+                      required
+                      className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                    />
+                    <input
+                      type="time"
+                      value={newTime}
+                      onChange={(e) => setNewTime(e.target.value)}
+                      required
+                      className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                    />
+                    <button
+                      type="submit"
+                      disabled={addingSlot}
+                      className="rounded-full bg-[#B89B5E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a3864d] disabled:opacity-50"
+                    >
+                      {addingSlot ? "Adding..." : "Add Slot"}
+                    </button>
+                  </form>
+                </div>
+
+                <div className="rounded-[28px] border border-[#E5E7EB] bg-white p-6">
+                  <div className="mb-6 flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-[#111827]">All Slots</h2>
+                    <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold text-[#6B7280]">
+                      {availSlots.filter(s => !s.is_booked).length} available
+                    </span>
+                  </div>
+                  {availSlots.length === 0 ? (
+                    <p className="py-8 text-center text-sm text-[#6B7280]">No slots added yet.</p>
+                  ) : (
+                    <div className="overflow-hidden rounded-[24px] border border-[#E5E7EB]">
+                      <table className="min-w-full text-left text-sm">
+                        <thead className="bg-[#F7F8FA] text-[#6B7280]">
+                          <tr>
+                            <th className="px-4 py-4">Date</th>
+                            <th className="px-4 py-4">Time</th>
+                            <th className="px-4 py-4">Status</th>
+                            <th className="px-4 py-4">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {availSlots.map((slot) => (
+                            <tr key={slot.id} className="border-t border-[#E5E7EB]">
+                              <td className="px-4 py-4 text-[#111827]">
+                                {new Date(slot.date + "T00:00:00").toLocaleDateString("en-ZA", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+                              </td>
+                              <td className="px-4 py-4 text-[#6B7280]">{slot.time}</td>
+                              <td className="px-4 py-4">
+                                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${slot.is_booked ? "bg-green-100 text-green-700" : "bg-[#F7F8FA] text-[#6B7280]"}`}>
+                                  {slot.is_booked ? "Booked" : "Available"}
+                                </span>
+                              </td>
+                              <td className="px-4 py-4">
+                                {!slot.is_booked && (
+                                  <button
+                                    onClick={() => deleteSlot(slot.id)}
+                                    className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-100"
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   )}
                 </div>
               </div>

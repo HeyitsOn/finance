@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, date, time } = await req.json();
+    const { email, date, time, slotId } = await req.json();
 
     if (!email || !date || !time) {
       return NextResponse.json(
@@ -21,6 +21,10 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    if (slotId) {
+      await supabase.from("availability").update({ is_booked: true }).eq("id", slotId);
     }
 
     await resend.emails.send({
