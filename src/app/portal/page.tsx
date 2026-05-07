@@ -33,7 +33,7 @@ export default function PortalPage() {
   const [user, setUser] = useState<any>(null);
   const [files, setFiles] = useState<DocRow[]>([]);
   const [messages, setMessages] = useState<MessageRow[]>([]);
-  const [uploadCategory, setUploadCategory] = useState("Tax");
+  const [uploadCategory, setUploadCategory] = useState("tax");
   const [uploadLoading, setUploadLoading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -271,9 +271,9 @@ export default function PortalPage() {
                           onChange={(e) => setUploadCategory(e.target.value)}
                           className="mt-2 w-full rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
                         >
-                          <option>Tax</option>
-                          <option>Income</option>
-                          <option>Expenses</option>
+                          <option value="tax">Tax</option>
+                          <option value="income">Income</option>
+                          <option value="expense">Expenses</option>
                         </select>
                       </label>
                     </div>
