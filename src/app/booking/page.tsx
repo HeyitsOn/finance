@@ -96,6 +96,7 @@ export default function BookingPage() {
                 {loading ? "Booking..." : "Book Consultation"}
               </button>
             </form>
+          </div>
         </div>
       </div>
     </main>
