@@ -34,16 +34,16 @@ export function SiteHeader() {
     <header
       className="sticky top-0 z-40"
       style={{
-        background: "rgba(61,71,40,0.7)",
+        background: "rgba(245,242,236,0.92)",
         backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(248,246,241,0.08)",
+        borderBottom: "1px solid rgba(107,122,69,0.15)",
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
           href="/"
           className="flex items-center gap-3 text-sm font-bold uppercase tracking-[0.25em] transition-opacity hover:opacity-80"
-          style={{ color: "#F8F6F1" }}
+          style={{ color: "#1a1a1a" }}
         >
           <span
             className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold"
@@ -60,7 +60,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               className="text-sm font-medium transition-colors hover:opacity-100"
-              style={{ color: "rgba(248,246,241,0.65)" }}
+              style={{ color: "#4a4a4a" }}
             >
               {item.label}
             </Link>
@@ -80,7 +80,7 @@ export function SiteHeader() {
               <button
                 onClick={handleLogout}
                 className="rounded-full border px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
-                style={{ borderColor: "rgba(248,246,241,0.2)", color: "#F8F6F1", background: "transparent" }}
+                style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a", background: "transparent" }}
               >
                 Logout
               </button>
@@ -90,7 +90,7 @@ export function SiteHeader() {
               <Link
                 href="/auth/login"
                 className="rounded-full border px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
-                style={{ borderColor: "rgba(248,246,241,0.2)", color: "#F8F6F1", background: "transparent" }}
+                style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a", background: "transparent" }}
               >
                 Log In
               </Link>
