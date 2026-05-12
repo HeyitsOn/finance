@@ -109,7 +109,7 @@ export default function PortalPage() {
     if (file) uploadFile(file);
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newMessage.trim() || !user) return;
     setMessageSending(true);
@@ -161,13 +161,13 @@ export default function PortalPage() {
         className="hidden"
         onChange={handleFileInput}
       />
-      <main className="min-h-screen bg-[#F7F8FA] py-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-8 rounded-[32px] border border-[#E5E7EB] bg-white p-8 shadow-[0_18px_50px_rgba(17,24,39,0.05)]">
+      <main className="min-h-screen bg-[#F7F8FA] py-6 sm:py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-6 rounded-[28px] border border-[#E5E7EB] bg-white p-5 shadow-[0_18px_50px_rgba(17,24,39,0.05)] sm:mb-8 sm:rounded-[32px] sm:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#B89B5E]">Client Portal</p>
-                <h1 className="mt-3 text-3xl font-semibold text-[#111827]">Manage documents, progress, and communication in one place.</h1>
+                <h1 className="mt-3 text-xl font-semibold text-[#111827] sm:text-3xl">Manage documents, progress, and communication in one place.</h1>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6B7280]">
                   Access your secure finance workspace, track review status, and get direct guidance from your advisor.
                 </p>
@@ -189,8 +189,29 @@ export default function PortalPage() {
             </div>
           </div>
 
+          {/* Mobile tab bar */}
+          <div className="mb-4 overflow-x-auto lg:hidden">
+            <div className="flex min-w-max gap-2 rounded-2xl border border-[#E5E7EB] bg-white p-2">
+              {portalSections.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSection(item.id)}
+                  className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition ${
+                    section === item.id
+                      ? "bg-[#B89B5E] text-white shadow-sm"
+                      : "text-[#6B7280] hover:bg-[#F3F4F6]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-            <aside className="space-y-4 rounded-[28px] border border-[#E5E7EB] bg-white p-5">
+            {/* Desktop sidebar */}
+            <aside className="hidden space-y-4 rounded-[28px] border border-[#E5E7EB] bg-white p-5 lg:block">
               <div className="space-y-4 rounded-3xl bg-[#F7F8FA] p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[#6B7280]">Workspace</p>
                 {portalSections.map((item) => (

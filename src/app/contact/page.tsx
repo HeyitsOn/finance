@@ -10,7 +10,7 @@ export default function ContactPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -42,7 +42,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] py-16">
       <div className="mx-auto max-w-3xl px-6">
-        <div className="rounded-[32px] border border-[#E5E7EB] bg-white p-10 shadow-[0_18px_40px_rgba(17,24,39,0.05)]">
+        <div className="rounded-[32px] border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_40px_rgba(17,24,39,0.05)] sm:p-10">
           <div className="space-y-6">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#B89B5E]">Contact</p>
             <h1 className="text-3xl font-semibold text-[#111827]">We are available to support your financial workflow.</h1>

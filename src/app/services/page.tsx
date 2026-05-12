@@ -12,7 +12,7 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] py-16">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-10 rounded-[32px] border border-[#E5E7EB] bg-white p-10 shadow-[0_18px_40px_rgba(17,24,39,0.05)]">
+        <div className="mb-10 rounded-[32px] border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_40px_rgba(17,24,39,0.05)] sm:p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#B89B5E]">Services</p>
           <h1 className="mt-4 text-3xl font-semibold text-[#111827]">Designed to keep your financial workflow clear and compliant.</h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6B7280]">

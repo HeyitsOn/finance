@@ -47,14 +47,14 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden" style={{ background: "#F5F2EC" }}>
       <div className="pointer-events-none absolute inset-0 opacity-20" style={{ background: "radial-gradient(ellipse 80% 60% at 60% 20%, #C9A96A22 0%, transparent 70%)" }} />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-20">
         {/* Hero */}
-        <section className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <div className="flex flex-col gap-7">
+        <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <div className="flex flex-col gap-6">
             <motion.p {...anim(0)} className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>
               Managed Finance Services
             </motion.p>
-            <motion.h1 {...anim(0.1)} className="text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl" style={{ color: "#1a1a1a" }}>
+            <motion.h1 {...anim(0.1)} className="text-3xl font-bold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl" style={{ color: "#1a1a1a" }}>
               Financial Management,{" "}
               <span style={{ color: "#C9A96A" }}>Made Simple</span>
             </motion.h1>
