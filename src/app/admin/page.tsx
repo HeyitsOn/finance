@@ -101,7 +101,7 @@ export default function AdminPage() {
     if (section === "availability") fetchAvailability();
   }, [token, section, fetchDocuments, fetchBookings, fetchContacts, fetchMessages, fetchAvailability]);
 
-  const addSlot = async (e: React.FormEvent) => {
+  const addSlot = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newDate || !newTime || !token) return;
     setAddingSlot(true);
@@ -150,7 +150,7 @@ export default function AdminPage() {
     fetchDocuments();
   };
 
-  const sendReply = async (e: React.FormEvent, userId: string) => {
+  const sendReply = async (e: React.SyntheticEvent<HTMLFormElement>, userId: string) => {
     e.preventDefault();
     if (!replyContent.trim() || !token) return;
     setReplySending(true);
@@ -182,18 +182,38 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F8FA] py-10">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-8 rounded-[32px] border border-[#E5E7EB] bg-white p-8 shadow-[0_18px_50px_rgba(17,24,39,0.05)]">
+    <main className="min-h-screen bg-[#F7F8FA] py-6 sm:py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-6 rounded-[28px] border border-[#E5E7EB] bg-white p-5 shadow-[0_18px_50px_rgba(17,24,39,0.05)] sm:mb-8 sm:rounded-[32px] sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#B89B5E]">Admin</p>
-          <h1 className="mt-3 text-3xl font-semibold text-[#111827]">Admin Dashboard</h1>
+          <h1 className="mt-3 text-xl font-semibold text-[#111827] sm:text-3xl">Admin Dashboard</h1>
           <p className="mt-3 text-sm leading-7 text-[#6B7280]">
             Manage client documents, bookings, and communications.
           </p>
         </div>
 
+        {/* Mobile tab bar */}
+        <div className="mb-4 overflow-x-auto lg:hidden">
+          <div className="flex min-w-max gap-2 rounded-2xl border border-[#E5E7EB] bg-white p-2">
+            {sections.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setSection(item.id)}
+                className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition ${
+                  section === item.id
+                    ? "bg-[#B89B5E] text-white shadow-sm"
+                    : "text-[#6B7280] hover:bg-[#F3F4F6]"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-          <aside className="rounded-[28px] border border-[#E5E7EB] bg-white p-5">
+          {/* Desktop sidebar */}
+          <aside className="hidden rounded-[28px] border border-[#E5E7EB] bg-white p-5 lg:block">
             <div className="space-y-2 rounded-3xl bg-[#F7F8FA] p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-[#6B7280]">Sections</p>
               {sections.map((item) => (
@@ -228,7 +248,7 @@ export default function AdminPage() {
                 {documents.length === 0 ? (
                   <p className="py-8 text-center text-sm text-[#6B7280]">No documents uploaded yet.</p>
                 ) : (
-                  <div className="overflow-hidden rounded-[24px] border border-[#E5E7EB]">
+                  <div className="overflow-x-auto rounded-[24px] border border-[#E5E7EB]">
                     <table className="min-w-full text-left text-sm">
                       <thead className="bg-[#F7F8FA] text-[#6B7280]">
                         <tr>
@@ -287,7 +307,7 @@ export default function AdminPage() {
                 {bookings.length === 0 ? (
                   <p className="py-8 text-center text-sm text-[#6B7280]">No bookings yet.</p>
                 ) : (
-                  <div className="overflow-hidden rounded-[24px] border border-[#E5E7EB]">
+                  <div className="overflow-x-auto rounded-[24px] border border-[#E5E7EB]">
                     <table className="min-w-full text-left text-sm">
                       <thead className="bg-[#F7F8FA] text-[#6B7280]">
                         <tr>
@@ -346,7 +366,7 @@ export default function AdminPage() {
             )}
 
             {section === "messages" && (
-              <div className="grid gap-6 md:grid-cols-[220px_1fr]">
+              <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
                 <div className="rounded-[28px] border border-[#E5E7EB] bg-white p-4">
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280]">Clients</p>
                   {uniqueUserIds.length === 0 ? (
@@ -424,20 +444,20 @@ export default function AdminPage() {
                 <div className="rounded-[28px] border border-[#E5E7EB] bg-white p-6">
                   <h2 className="text-lg font-semibold text-[#111827]">Add Available Slot</h2>
                   <p className="mt-1 text-sm text-[#6B7280]">Set dates and times clients can book consultations.</p>
-                  <form onSubmit={addSlot} className="mt-5 flex flex-wrap gap-3">
+                  <form onSubmit={addSlot} className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <input
                       type="date"
                       value={newDate}
                       onChange={(e) => setNewDate(e.target.value)}
                       required
-                      className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                      className="w-full rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E] sm:w-auto"
                     />
                     <input
                       type="time"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
                       required
-                      className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E]"
+                      className="w-full rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-4 py-3 text-sm text-[#111827] outline-none transition focus:border-[#B89B5E] sm:w-auto"
                     />
                     <button
                       type="submit"
@@ -459,7 +479,7 @@ export default function AdminPage() {
                   {availSlots.length === 0 ? (
                     <p className="py-8 text-center text-sm text-[#6B7280]">No slots added yet.</p>
                   ) : (
-                    <div className="overflow-hidden rounded-[24px] border border-[#E5E7EB]">
+                    <div className="overflow-x-auto rounded-[24px] border border-[#E5E7EB]">
                       <table className="min-w-full text-left text-sm">
                         <thead className="bg-[#F7F8FA] text-[#6B7280]">
                           <tr>

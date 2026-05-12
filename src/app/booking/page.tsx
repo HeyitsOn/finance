@@ -48,7 +48,7 @@ export default function BookingPage() {
       weekday: "long", day: "numeric", month: "long", year: "numeric",
     });
 
-  const handleBook = async (e: React.FormEvent) => {
+  const handleBook = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selectedDate || !email) return;
     setLoading(true);
@@ -93,7 +93,7 @@ export default function BookingPage() {
       <div className="mx-auto max-w-5xl px-6">
         <motion.div {...anim(0)} className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>Booking</p>
-          <h1 className="mt-3 text-4xl font-bold" style={{ color: "#F8F6F1" }}>Schedule your consultation</h1>
+          <h1 className="mt-3 text-2xl font-bold sm:text-4xl" style={{ color: "#F8F6F1" }}>Schedule your consultation</h1>
           <p className="mt-3 text-sm leading-7" style={{ color: "rgba(248,246,241,0.6)" }}>
             Choose from available slots below. Your advisor will confirm the details by email.
           </p>

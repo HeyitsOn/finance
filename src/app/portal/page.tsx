@@ -109,7 +109,7 @@ export default function PortalPage() {
     if (file) uploadFile(file);
   };
 
-  const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSendMessage = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newMessage.trim() || !user) return;
     setMessageSending(true);
@@ -353,7 +353,7 @@ export default function PortalPage() {
                   {files.length === 0 ? (
                     <p className="py-8 text-center text-sm text-[#6B7280]">No documents uploaded yet.</p>
                   ) : (
-                    <div className="overflow-hidden rounded-[24px] border border-[#E5E7EB]">
+                    <div className="overflow-x-auto rounded-[24px] border border-[#E5E7EB]">
                       <table className="min-w-full text-left text-sm">
                         <thead className="bg-[#F7F8FA] text-[#6B7280]">
                           <tr>
