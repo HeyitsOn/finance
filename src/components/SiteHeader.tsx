@@ -164,18 +164,17 @@ export function SiteHeader() {
         >
           <nav className="flex flex-col gap-1 px-4 pt-3 pb-2">
             {navLinks.map((item) => (
-              <button
+              <a
                 key={item.href}
-                type="button"
-                onClick={() => router.push(item.href)}
-                className={`w-full rounded-xl px-4 py-3 text-left text-sm transition-all ${
+                href={item.href}
+                className={`block rounded-xl px-4 py-3 text-sm transition-all ${
                   active(item.href)
                     ? "bg-[rgba(201,169,106,0.12)] font-semibold text-[#C9A96A]"
                     : "font-medium text-[#4a4a4a] active:bg-[rgba(201,169,106,0.1)]"
                 }`}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
           </nav>
 
@@ -185,14 +184,13 @@ export function SiteHeader() {
           >
             {user ? (
               <>
-                <button
-                  type="button"
-                  onClick={() => router.push("/portal")}
-                  className="w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                <a
+                  href="/portal"
+                  className="block w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
                   Portal
-                </button>
+                </a>
                 <button
                   type="button"
                   onClick={handleLogout}
@@ -204,22 +202,20 @@ export function SiteHeader() {
               </>
             ) : (
               <>
-                <button
-                  type="button"
-                  onClick={() => router.push("/auth/login")}
-                  className="w-full rounded-full border py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                <a
+                  href="/auth/login"
+                  className="block w-full rounded-full border py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a" }}
                 >
                   Log In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push("/auth/signup")}
-                  className="w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                </a>
+                <a
+                  href="/auth/signup"
+                  className="block w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
                   Sign Up
-                </button>
+                </a>
               </>
             )}
           </div>
