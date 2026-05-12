@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -17,6 +17,7 @@ const navLinks = [
 export function SiteHeader() {
   const [user, setUser] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
@@ -27,11 +28,18 @@ export function SiteHeader() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Close menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setOpen(false);
     router.push("/");
   };
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header
@@ -46,7 +54,6 @@ export function SiteHeader() {
         {/* Logo */}
         <Link
           href="/"
-          onClick={() => setOpen(false)}
           className="flex items-center gap-2.5 text-sm font-bold uppercase tracking-[0.25em] transition-opacity hover:opacity-80"
           style={{ color: "#1a1a1a" }}
         >
@@ -60,13 +67,17 @@ export function SiteHeader() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {navLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium transition-opacity hover:opacity-70"
-              style={{ color: "#4a4a4a" }}
+              className="rounded-xl px-4 py-2 text-sm font-medium transition-all"
+              style={{
+                color: isActive(item.href) ? "#C9A96A" : "#4a4a4a",
+                background: isActive(item.href) ? "rgba(201,169,106,0.1)" : "transparent",
+                fontWeight: isActive(item.href) ? 600 : 500,
+              }}
             >
               {item.label}
             </Link>
@@ -112,7 +123,7 @@ export function SiteHeader() {
           )}
         </div>
 
-        {/* Mobile hamburger button */}
+        {/* Mobile hamburger */}
         <button
           onClick={() => setOpen((o) => !o)}
           className="flex h-10 w-10 items-center justify-center rounded-xl md:hidden"
@@ -129,14 +140,17 @@ export function SiteHeader() {
           className="border-t md:hidden"
           style={{ background: "rgba(245,242,236,0.98)", borderColor: "rgba(107,122,69,0.15)" }}
         >
-          <nav className="flex flex-col px-4 py-3">
+          <nav className="flex flex-col gap-1 px-4 py-3">
             {navLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-3 text-sm font-medium transition-colors"
-                style={{ color: "#4a4a4a" }}
+                className="rounded-xl px-4 py-3 text-sm font-medium transition-all"
+                style={{
+                  color: isActive(item.href) ? "#C9A96A" : "#4a4a4a",
+                  background: isActive(item.href) ? "rgba(201,169,106,0.1)" : "transparent",
+                  fontWeight: isActive(item.href) ? 600 : 500,
+                }}
               >
                 {item.label}
               </Link>
@@ -148,7 +162,6 @@ export function SiteHeader() {
               <>
                 <Link
                   href="/portal"
-                  onClick={() => setOpen(false)}
                   className="rounded-full py-3 text-center text-sm font-semibold"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
@@ -166,7 +179,6 @@ export function SiteHeader() {
               <>
                 <Link
                   href="/auth/login"
-                  onClick={() => setOpen(false)}
                   className="rounded-full border py-3 text-center text-sm font-semibold"
                   style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a" }}
                 >
@@ -174,7 +186,6 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   href="/auth/signup"
-                  onClick={() => setOpen(false)}
                   className="rounded-full py-3 text-center text-sm font-semibold"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
