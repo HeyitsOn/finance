@@ -21,6 +21,10 @@ textarea {
   font: inherit;
 }
 
+a, button {
+  touch-action: manipulation;
+}
+
 ::selection {
   background: rgba(184, 155, 94, 0.18);
   color: #111827;

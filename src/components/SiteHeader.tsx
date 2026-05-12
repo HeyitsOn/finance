@@ -151,7 +151,7 @@ export function SiteHeader() {
         </div>
       </header>
 
-      {/* Mobile dropdown — fixed outside header, top offset measured dynamically to avoid iOS sticky+absolute touch bug */}
+      {/* Mobile dropdown */}
       {open && (
         <div
           className="fixed inset-x-0 z-[49] md:hidden"
@@ -164,18 +164,18 @@ export function SiteHeader() {
         >
           <nav className="flex flex-col gap-1 px-4 pt-3 pb-2">
             {navLinks.map((item) => (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`rounded-xl px-4 py-3 text-sm transition-all ${
+                type="button"
+                onClick={() => router.push(item.href)}
+                className={`w-full rounded-xl px-4 py-3 text-left text-sm transition-all ${
                   active(item.href)
                     ? "bg-[rgba(201,169,106,0.12)] font-semibold text-[#C9A96A]"
                     : "font-medium text-[#4a4a4a] active:bg-[rgba(201,169,106,0.1)]"
                 }`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
 
@@ -185,18 +185,18 @@ export function SiteHeader() {
           >
             {user ? (
               <>
-                <Link
-                  href="/portal"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                <button
+                  type="button"
+                  onClick={() => router.push("/portal")}
+                  className="w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
                   Portal
-                </Link>
+                </button>
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="rounded-full border py-3 text-sm font-semibold transition-all active:opacity-70"
+                  className="w-full rounded-full border py-3 text-sm font-semibold transition-all active:opacity-70"
                   style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a" }}
                 >
                   Logout
@@ -204,22 +204,22 @@ export function SiteHeader() {
               </>
             ) : (
               <>
-                <Link
-                  href="/auth/login"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full border py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                <button
+                  type="button"
+                  onClick={() => router.push("/auth/login")}
+                  className="w-full rounded-full border py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ borderColor: "rgba(107,122,69,0.3)", color: "#4a4a4a" }}
                 >
                   Log In
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/auth/signup")}
+                  className="w-full rounded-full py-3 text-center text-sm font-semibold transition-all active:opacity-70"
                   style={{ background: "#C9A96A", color: "#2d3318" }}
                 >
                   Sign Up
-                </Link>
+                </button>
               </>
             )}
           </div>
