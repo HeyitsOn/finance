@@ -109,17 +109,17 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile nav strip — always visible, scrolls horizontally */}
+      {/* Mobile nav strip — always visible, wraps onto two lines if needed */}
       <div
-        className="overflow-x-auto border-t md:hidden"
+        className="border-t px-3 py-2 md:hidden"
         style={{ borderColor: "rgba(107,122,69,0.1)" }}
       >
-        <nav className="flex min-w-max gap-1 px-4 py-2">
+        <nav className="flex flex-wrap gap-1">
           {navLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition hover:bg-[rgba(201,169,106,0.1)]"
+              className="rounded-xl px-3 py-2 text-sm font-medium transition active:bg-[rgba(201,169,106,0.15)]"
               style={{ color: "#4a4a4a" }}
             >
               {item.label}
