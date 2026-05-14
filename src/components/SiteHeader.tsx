@@ -7,11 +7,11 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
+  { href: "/#hero", label: "Home" },
+  { href: "/#services", label: "Services" },
+  { href: "/#booking", label: "Booking" },
+  { href: "/#contact", label: "Contact" },
   { href: "/portal", label: "Client Portal" },
-  { href: "/booking", label: "Booking" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function SiteHeader() {
@@ -48,8 +48,10 @@ export function SiteHeader() {
     router.push("/");
   };
 
-  const active = (href: string) =>
-    href === "/" ? pathname === "/" : pathname?.startsWith(href);
+  const active = (href: string) => {
+    if (href.startsWith("/#")) return false;
+    return href === "/" ? pathname === "/" : pathname?.startsWith(href);
+  };
 
   return (
     <>
@@ -81,7 +83,7 @@ export function SiteHeader() {
           {/* Desktop nav */}
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
                 className={`rounded-xl px-4 py-2 text-sm transition-all ${
@@ -91,7 +93,7 @@ export function SiteHeader() {
                 }`}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -167,6 +169,7 @@ export function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpen(false)}
                 className={`block rounded-xl px-4 py-3 text-sm transition-all ${
                   active(item.href)
                     ? "bg-[rgba(201,169,106,0.12)] font-semibold text-[#C9A96A]"
