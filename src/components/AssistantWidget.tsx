@@ -49,9 +49,9 @@ export default function AssistantWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 pointer-events-none sm:bottom-6 sm:right-6">
       <div
-        className={`w-[360px] overflow-hidden rounded-[24px] transition-all duration-300 ${
+        className={`w-[calc(100vw-2rem)] overflow-hidden rounded-[24px] transition-all duration-300 sm:w-[360px] ${
           open ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
         }`}
         style={{
@@ -143,7 +143,7 @@ export default function AssistantWidget() {
 
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all hover:scale-105 hover:shadow-[0_8px_30px_rgba(201,169,106,0.4)]"
+        className="pointer-events-auto flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all hover:scale-105 hover:shadow-[0_8px_30px_rgba(201,169,106,0.4)]"
         style={{ background: "#C9A96A", color: "#2d3318", boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}
       >
         <Sparkles size={16} />
