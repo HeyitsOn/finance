@@ -79,7 +79,7 @@ export default function Home() {
 
   useEffect(() => {
     fetch("/api/availability")
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : []))
       .then((data) => setSlots(Array.isArray(data) ? data : []));
   }, []);
 
