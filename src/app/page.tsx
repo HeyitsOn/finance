@@ -207,7 +207,7 @@ export default function Home() {
 
           <motion.div
             {...anim(0.2)}
-            className="rounded-[28px] border p-7"
+            className="rounded-[28px] border p-5 sm:p-7"
             style={{ background: "rgba(107,122,69,0.07)", backdropFilter: "blur(20px)", borderColor: "rgba(248,246,241,0.12)", boxShadow: "0 24px 60px rgba(0,0,0,0.25), inset 0 1px 0 rgba(248,246,241,0.1)" }}
           >
             <p className="mb-6 text-xs font-semibold uppercase tracking-[0.28em]" style={{ color: "#C9A96A" }}>Client Portal Overview</p>
@@ -229,7 +229,7 @@ export default function Home() {
       </section>
 
       {/* ── Services ─────────────────────────────────────────────────────── */}
-      <section id="services" className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <section id="services" className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
         <motion.div {...inView(0)} className="mb-10 rounded-[32px] border border-[rgba(107,122,69,0.15)] p-6 sm:p-10" style={{ background: "rgba(107,122,69,0.05)" }}>
           <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>Services</p>
           <h2 className="mt-4 text-2xl font-bold sm:text-3xl" style={{ color: "#1a1a1a" }}>Designed to keep your financial workflow clear and compliant.</h2>
@@ -251,7 +251,7 @@ export default function Home() {
         </div>
 
         {/* How it works */}
-        <motion.div {...inView(0)} className="mt-16 rounded-[28px] p-10" style={{ background: "rgba(107,122,69,0.05)", backdropFilter: "blur(16px)", border: "1px solid rgba(107,122,69,0.15)" }}>
+        <motion.div {...inView(0)} className="mt-16 rounded-[28px] p-6 sm:p-10" style={{ background: "rgba(107,122,69,0.05)", backdropFilter: "blur(16px)", border: "1px solid rgba(107,122,69,0.15)" }}>
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>How It Works</p>
           <div className="grid gap-6 sm:grid-cols-3">
             {steps.map((step, i) => (
@@ -266,7 +266,7 @@ export default function Home() {
         </motion.div>
 
         {/* Trust */}
-        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {trust.map((item, i) => (
             <motion.div key={item.title} {...inView(i * 0.1)} className="rounded-[24px] p-6 transition-all duration-300 hover:scale-[1.02]" style={{ background: "rgba(107,122,69,0.05)", backdropFilter: "blur(10px)", border: "1px solid rgba(107,122,69,0.15)" }}>
               <p className="text-sm font-semibold" style={{ color: "#C9A96A" }}>{item.title}</p>
@@ -277,8 +277,8 @@ export default function Home() {
       </section>
 
       {/* ── Booking ──────────────────────────────────────────────────────── */}
-      <section id="booking" className="py-20" style={{ background: "linear-gradient(135deg, #4F5B35 0%, #6B7A45 50%, #3d4728 100%)" }}>
-        <div className="mx-auto max-w-5xl px-6">
+      <section id="booking" className="py-12 sm:py-20" style={{ background: "linear-gradient(135deg, #4F5B35 0%, #6B7A45 50%, #3d4728 100%)" }}>
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div {...inView(0)} className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A96A" }}>Booking</p>
             <h2 className="mt-3 text-2xl font-bold sm:text-4xl" style={{ color: "#F8F6F1" }}>Schedule your consultation</h2>
@@ -291,7 +291,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="rounded-[28px] p-12 text-center"
+              className="rounded-[28px] p-8 sm:p-12 text-center"
               style={{ background: "rgba(248,246,241,0.07)", border: "1px solid rgba(201,169,106,0.25)", backdropFilter: "blur(16px)" }}
             >
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: "rgba(201,169,106,0.2)" }}>
@@ -449,8 +449,8 @@ export default function Home() {
       </section>
 
       {/* ── Contact ──────────────────────────────────────────────────────── */}
-      <section id="contact" className="py-20" style={{ background: "#F7F8FA" }}>
-        <div className="mx-auto max-w-3xl px-6">
+      <section id="contact" className="py-12 sm:py-20" style={{ background: "#F7F8FA" }}>
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <motion.div
             {...inView(0)}
             className="rounded-[32px] border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_40px_rgba(17,24,39,0.05)] sm:p-10"
